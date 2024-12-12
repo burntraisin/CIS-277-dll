@@ -102,16 +102,13 @@ void addNode()
 
         cout << "Enter student name: ";
         cin >> temp->studentName;
-
         cout << "Enter the student's ID (# from 100-999): ";
         cin >> temp->studentID;
-
         while (!(temp->studentID >= 100 && temp->studentID <= 999)) // Input validation
         {
             cout << "!! ERROR: Please enter a valid number from 100-999: ";
             cin >> temp->studentID;
         }
-
         Node *temp2 = pStart; // Check if a duplicate record is found
         while (temp2 != NULL)
         {
@@ -122,8 +119,6 @@ void addNode()
             }
             temp2 = temp2->pNext;
         }
-
-
         cout << "Enter the student's GPA: ";
         cin >> temp->studentGPA;
 
@@ -156,7 +151,6 @@ void addNode()
                 prevNode->pNext = temp;
                 temp->pNext = temp2;
             }
-
             cout << "NOTICE: New node successfully added." << endl;
         }
     }
