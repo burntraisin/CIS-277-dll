@@ -39,8 +39,7 @@ int main()
         << '\n' << "7. Purge the list"
         << '\n' << "8. Exit"
         << '\n' << "-----------------------------------------------------------"
-        << '\n' << "Enter your choice: "
-        << endl;
+        << '\n' << "Enter your choice: ";
         cin >> userChoice;
 
         switch (userChoice) 
@@ -93,7 +92,7 @@ void createList()
 
 void addNode()
 {
-    if (pStart == NULL)
+    if ((pStart == NULL) && (isListEmpty == true))
     {
         cout << "List was not created. Please create the list first." << endl;
     }
@@ -106,14 +105,14 @@ void addNode()
 
         cout << "Enter the student's ID (# from 100-999): ";
         cin >> temp->studentID;
-        // Input validation
-        while (!(temp->studentID >= 100 && temp->studentID <= 999))
+
+        while (!(temp->studentID >= 100 && temp->studentID <= 999)) // Input validation
         {
             cout << "!! ERROR: Please enter a valid number from 100-999: ";
             cin >> temp->studentID;
         }
-        // Check if a duplicate record is found
-        Node *temp2 = pStart;
+
+        Node *temp2 = pStart; // Check if a duplicate record is found
         while (temp2 != NULL)
         {
             if (temp2->studentID == temp->studentID)
@@ -133,7 +132,7 @@ void addNode()
         if (isListEmpty == true)
         {
             pStart = temp;
-            cout << "First node added." << endl;
+            cout << "NOTICE: First node added." << endl;
             isListEmpty = false;
         }
         else
@@ -141,8 +140,7 @@ void addNode()
             Node *temp2 = pStart;
             Node *prevNode = NULL;
 
-            // Iterate through list until inputted ID is greater than the established node
-            while (temp2 != NULL && temp2->studentID < temp->studentID)
+            while (temp2 != NULL && temp2->studentID < temp->studentID) // Iterate through list until inputted ID is greater than the established node
             {
                 prevNode = temp2;
                 temp2 = temp2->pNext;
@@ -159,20 +157,16 @@ void addNode()
                 temp->pNext = temp2;
             }
 
-            cout << "New node successfully added." << endl;
+            cout << "NOTICE: New node successfully added." << endl;
         }
     }
 }
 
 void deleteNode()
 {
-    if (pStart == NULL)
+    if (pStart == NULL || isListEmpty == true)
     {
-        cout << "List was not created. Please create the list first." << endl;
-    }
-    else if (isListEmpty == true)
-    {
-        cout << "List is empty. There are no nodes to delete." << endl;
+        cout << "There are no nodes to delete." << endl;
     }
     else
     {
@@ -181,23 +175,144 @@ void deleteNode()
         cout << "Enter the student ID (# 100-999) of the record to delete: ";
         cin >> inputID;
 
-        // Input validation
         while (!(inputID >= 100 && inputID <= 999))
         {
             cout << "!! ERROR: Please enter a valid number from 100-999: ";
             cin >> inputID;
+        }
+
+        Node *temp = pStart; // Iterate through list until inputted ID matches
+        Node *prevNode = NULL;
+        int matchID = 0;
+        while (temp != NULL && temp->studentID != inputID)
+        {
+            matchID = temp->studentID;
+            prevNode = temp;
+            temp = temp->pNext;
+        }
+        // By now, the default temp->studentID == inputID is assumed to have happened
+        bool isMatch = false; // Handle deleting a node that is not in the list
+        if (matchID == inputID)
+        {
+            isMatch = true;
+        }
+        else
+        {
+            isMatch = false;
+        }
+
+        if (isMatch == false)
+        {
+            cout << "Record was not found." << endl;
+            return;
+        }
+        
+        if (prevNode == NULL) // Deleting the first node
+        {
+            prevNode = temp->pNext;
+            pStart = prevNode; // Update pStart
+            delete temp;
+        }
+        else if (temp->pNext == NULL) // Check if we've reached the last node
+        {
+            prevNode->pNext = NULL;
+            delete temp;
+        }
+        else
+        {
+            prevNode->pNext = temp->pNext;
+            delete temp;
         }
     }
 }
 
 void searchNode()
 {
+    if (pStart == NULL || isListEmpty == true)
+    {
+        cout << "There are no nodes to search." << endl;
+    }
+    else
+    {
+        int inputID = 0;
 
+        cout << "Enter the student ID (# 100-999) of the record to display: ";
+        cin >> inputID;
+
+        while (!(inputID >= 100 && inputID <= 999))
+        {
+            cout << "!! ERROR: Please enter a valid number from 100-999: ";
+            cin >> inputID;
+        }
+
+        Node *temp = pStart;
+        bool isMatch = false;
+        while (temp != NULL)
+        {
+            if (temp->studentID == inputID)
+            {
+                cout << "| Name: " << temp->studentName << "  |  " << "ID: " << temp->studentID << "  |  " << "GPA: " << temp->studentGPA << "  |" << endl;
+                isMatch = true;
+                break;
+            }
+            temp = temp->pNext;
+        }
+        if (isMatch == false)
+        {
+            cout << "Record was not found." << endl;
+        }
+    }
 }
 
 void modifyNode()
 {
+    if (pStart == NULL || isListEmpty == true)
+    {
+        cout << "There are no nodes to modify." << endl;
+    }
+    else
+    {
+        int inputID = 0;
 
+        cout << "Enter the student ID (# 100-999) of the record to modify: ";
+        cin >> inputID;
+
+        while (!(inputID >= 100 && inputID <= 999))
+        {
+            cout << "!! ERROR: Please enter a valid number from 100-999: ";
+            cin >> inputID;
+        }
+
+        Node *temp = pStart;
+        bool isMatch = false;
+        while (temp != NULL)
+        {
+            if (temp->studentID == inputID)
+            {
+                string originalName = temp->studentName;
+                double originalGPA = temp->studentGPA;
+
+                cout << "Enter the NEW name: ";
+                cin >> temp->studentName;
+                cout << "Enter the NEW GPA: ";
+                cin >> temp->studentGPA;
+
+                cout << "ORIGINAL: ";
+                cout << "| Name: " << originalName << "  |  " << "ID: " << temp->studentID << "  |  " << "GPA: " << originalGPA << "  |" << endl;
+
+                cout << "NEW CHANGES TO BE IMPLEMENTED: ";
+                cout << "| Name: " << temp->studentName << "  |  " << "ID: " << temp->studentID << "  |  " << "GPA: " << temp->studentGPA << "  |" << endl;
+
+                isMatch = true;
+                break;
+            }
+            temp = temp->pNext;
+        }
+        if (isMatch == false)
+        {
+            cout << "Record was not found." << endl;
+        }
+    }
 }
 
 void displayList()
@@ -220,5 +335,22 @@ void displayList()
 
 void purgeList()
 {
+    Node *temp = pStart;
+    Node *prevNode = NULL;
 
+    if (pStart == NULL || isListEmpty == true)
+    { 
+        cout << "There are no nodes to delete." << endl;
+        return;
+    }
+
+    while (temp != NULL)
+    {
+        prevNode = temp;
+        temp = temp->pNext;
+        delete prevNode;
+    }
+
+    pStart = NULL;
+    cout << "All nodes have been purged. The list is empty." << endl;
 }
