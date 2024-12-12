@@ -183,28 +183,24 @@ void deleteNode()
 
         Node *temp = pStart; // Iterate through list until inputted ID matches
         Node *prevNode = NULL;
-        int matchID = 0;
+        bool isMatch = false; // Handle deleting a node that is not in the list
+        int currentID = 0;
         while (temp != NULL && temp->studentID != inputID)
         {
-            matchID = temp->studentID;
+            currentID = temp->studentID;
             prevNode = temp;
             temp = temp->pNext;
-        }
-        // By now, the default temp->studentID == inputID is assumed to have happened
-        bool isMatch = false; // Handle deleting a node that is not in the list
-        if (matchID == inputID)
-        {
-            isMatch = true;
-        }
-        else
-        {
-            isMatch = false;
-        }
-
-        if (isMatch == false)
-        {
-            cout << "Record was not found." << endl;
-            return;
+            if (currentID == inputID) // By now, the default temp->studentID == inputID is assumed to have happened
+            {
+                isMatch = true;
+                break;
+            }
+            else
+            {
+                isMatch = false;
+                cout << "Record was not found." << endl;
+                return;
+            }
         }
         
         if (prevNode == NULL) // Deleting the first node
